@@ -8,9 +8,11 @@ type PizzaSizeType = {
   text: string
 }
 
+type flavoursType = {
+  flavors : Array<object>
+}
+
 type PizzaFlavourType = {
-  map(arg0: (flavour: any) => any): import("react").SetStateAction<never[]>
-  length: number
   id: string
   image: string
   name: string
@@ -22,15 +24,12 @@ type PizzaFlavourType = {
   }
 }
 
+type pedidosType = {
+  pedidos : Array<PizzaOrderType>
+}
+
 type PizzaOrderType = {
-  item: {
-    name: string
-    image: string
-    size: string
-    slices: number
-    value: number
-  }
-  total: number
+  //nada
 }
 
 type OrderContextProps = {
@@ -40,6 +39,10 @@ type OrderContextProps = {
   setPizzaFlavour: React.Dispatch<React.SetStateAction<PizzaFlavourType>>
   pizzaOrder: PizzaOrderType
   setPizzaOrder: React.Dispatch<React.SetStateAction<PizzaOrderType>>
+  flavours: flavoursType
+  setflavours: React.Dispatch<React.SetStateAction<flavoursType>>
+  pedidos: pedidosType
+  setpedidos: React.Dispatch<React.SetStateAction<object>>
 }
 
 const OrderContext = createContext<OrderContextProps>({})
@@ -48,6 +51,10 @@ const OrderContextProvider = ({ children }) => {
   const [pizzaSize, setPizzaSize] = useState()
   const [pizzaFlavour, setPizzaFlavour] = useState()
   const [pizzaOrder, setPizzaOrder] = useState()
+  const [flavours
+  , setflavours
+] = useState()
+  const [pedidos, setpedidos] = useState()
 
   return (
     <OrderContext.Provider
@@ -58,6 +65,12 @@ const OrderContextProvider = ({ children }) => {
         setPizzaFlavour,
         pizzaOrder,
         setPizzaOrder,
+        flavours
+      ,
+        setflavours
+      ,
+        pedidos,
+        setpedidos
       }}
     >
       {children}

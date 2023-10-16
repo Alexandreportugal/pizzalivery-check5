@@ -25,20 +25,11 @@ import { Title } from "../../components/title/Title"
 
 export default function Flavours() {
   const navigate = useNavigate()
-  const { pizzaSize, pizzaFlavour, setPizzaFlavour } = useContext(OrderContext)
-  const [flavourId, setflavourId] = useState("")
-  const [selectedFlavours, setSelectedFlavours] = useState([]);
 
-  const handleSelectFlavours = (event) => {
-    const flavourId = event.target.id;
-    if (selectedFlavours.includes(flavourId)) {
-      setSelectedFlavours(selectedFlavours.filter((id) => id !== flavourId));
-    } else {
-      if (selectedFlavours.length < 2) {
-        setSelectedFlavours([...selectedFlavours, flavourId]);
-      }
-    }
-  };
+  const { pizzaSize, pizzaFlavour, flavours, pedidos , setflavours, setPizzaFlavour } = useContext(OrderContext)
+  const [flavourId, setflavourId] = useState("")
+  const [flavoursEscolhidos, setflavoursEscolhidos] = useState([])
+  const [arraySab, setarraySab] = useState([])
 
   const flavoursOptions = [
     {
@@ -96,7 +87,17 @@ export default function Flavours() {
   }
 
   const handleClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setflavourId(event.target.id)
+    if(flavoursEscolhidos.length <= (pizzaSize[0].flavours)-1){
+      setflavourId(event.target.id)
+      console.log(event.target.id)
+      setflavoursEscolhidos([...flavoursEscolhidos, event.target.id])
+      setPizzaFlavour(getPizzaFlavour(flavoursEscolhidos[-1])[0])
+  } else {
+      console.log("passou")
+      console.log(flavoursEscolhidos.join(" - "))
+    }
+
+    console.log(pedidos)
   }
 
   const handleBack = () => {
@@ -104,16 +105,27 @@ export default function Flavours() {
   }
 
   const handleNext = () => {
-    const selectedFlavour = getPizzaFlavour(flavourId)
-    setPizzaFlavour(selectedFlavour)
+    console.log(arraySab)
+    setflavours(arraySab)
+    setPizzaFlavour(arraySab[0])
     navigate(routes.summary)
   }
 
   useEffect(() => {
-    if (!pizzaFlavour) return
 
-    setflavourId(pizzaFlavour[0].id)
   }, [])
+
+  useEffect(() => {
+    for(let i = 0; i < flavoursEscolhidos.length; i++){
+      console.log(flavoursEscolhidos.length)
+      setarraySab([...arraySab, getPizzaFlavour(flavoursEscolhidos[i])[0]]);
+    }
+
+  }, [flavoursEscolhidos]);
+  
+  useEffect(() => {
+    //console.log(arraySab)
+  }, [arraySab]);
 
   return (
     <Layout>
@@ -141,26 +153,4 @@ export default function Flavours() {
       </FlavourActionWrapper>
     </Layout>
   )
-  {
-    id: "14", // Um ID exclusivo para o novo sabor
-    image: Seu_Novo_Sabor_Imagem, // Substitua com o caminho da imagem do novo sabor
-    name: "Bacon", // Nome do novo sabor
-    description: "Bacon e Mussarela.", // Descrição do sabor
-    price: {
-      "8": 80, // Preço para pizza de 8 fatias
-      "4": 40, // Preço para pizza de 4 fatias
-      "1": 20, // Preço para pizza individual
-    },
-  },
-  {
-    id: "15", // Outro ID exclusivo para o segundo novo sabor
-    image: Outro_Sabor_Imagem, // Substitua com o caminho da imagem do segundo novo sabor
-    name: "Pepperoni", // Nome do segundo novo sabor
-    description: "Pepperoni e Mussarela.", // Descrição do segundo sabor
-    price: {
-      "8": 85, // Preço para pizza de 8 fatias
-      "4": 42.5, // Preço para pizza de 4 fatias
-      "1": 21.5, // Preço para pizza individual
-    },
-  },  
 }

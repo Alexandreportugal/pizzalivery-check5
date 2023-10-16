@@ -14,8 +14,7 @@ import {
 } from "./Checkout.style"
 
 export default function Checkout() {
-  const { pizzaOrder } = useContext(OrderContext)
-
+  const { pizzaOrder, pedidos } = useContext(OrderContext)
   const navigate = useNavigate()
 
   const paymentOptions = [
@@ -48,7 +47,9 @@ export default function Checkout() {
   }
 
   useEffect(() => {
+    console.log(pedidos)
     if (pizzaOrder === undefined) {
+      console.log(pizzaOrder)
       return navigate(routes.pizzaSize)
     }
   }, [])
@@ -61,10 +62,16 @@ export default function Checkout() {
       <CheckoutItem>
         <h2>Items</h2>
         <CheckoutItemFlex>
-          <p>
-            {pizzaOrder?.item.name}/{pizzaOrder?.item.size}
-          </p>
-          <p>{convertToCurrency(pizzaOrder?.item.value)}</p>
+        {pedidos.length === 2 ? (
+          <>
+        <p> Pizza de: {pedidos[0].item['name']} no total: {pedidos[0].total} </p>
+        <p> Pizza de: {pedidos[1].item['name']} Total: {pedidos[1].total} </p>
+          </>
+      ) : (
+        <>
+        <p> Pizza de: {pedidos[0].item['name']} Total: {pedidos[0].total} </p>
+        </>
+      )}
         </CheckoutItemFlex>
       </CheckoutItem>
       <CheckoutItem>
@@ -94,7 +101,7 @@ export default function Checkout() {
       <CheckoutItem>
         <CheckoutItemFlex>
           <h2>Total do pedido</h2>
-          <p>{convertToCurrency(pizzaOrder?.total)}</p>
+          <p>{convertToCurrency(pedidos[0].total + pedidos[1].total)}</p>
         </CheckoutItemFlex>
       </CheckoutItem>
       <CheckoutAction>
